@@ -106,7 +106,7 @@ export default {
 			msg.setSubject(`${emailContent.subject} - #${nanoid()}`);
 			msg.addMessage({
 				contentType: 'text/html',
-				data: `<b>Sender's email</b>: ${emailContent.email}<br><br><b>Content</b>:<br>${emailContent.body}`,
+				data: `<b>Sender's email</b>: ${emailContent.email}<br><br><b>Content</b>:<br>${emailContent.body}<br><br><b>This email was sent by a service, do not reply.</b>`,
 			});
 
 			var message = new EmailMessage(env.SENDER_ADDRESS, env.RECIPIENT_ADDRESS, msg.asRaw());
