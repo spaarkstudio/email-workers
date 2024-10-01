@@ -1,5 +1,6 @@
 import { EmailMessage } from 'cloudflare:email';
 import { createMimeMessage } from 'mimetext/browser';
+import { nanoid } from 'nanoid';
 
 interface EmailContent {
 	name: string;
@@ -36,22 +37,73 @@ export default {
 			const emailContent = (await request.json()) as EmailContent;
 
 			if (typeof emailContent.name !== 'string') {
-				return responseCorsStatus(400, corsHeaders);
+				return Response.json(
+					{
+						success: false,
+						reason: 'Name was left empty.',
+					},
+					{
+						status: 400,
+						headers: corsHeaders,
+					}
+				);
 			}
 			if (typeof emailContent.email !== 'string') {
-				return responseCorsStatus(400, corsHeaders);
+				return Response.json(
+					{
+						success: false,
+						reason: 'Email was left empty.',
+					},
+					{
+						status: 400,
+						headers: corsHeaders,
+					}
+				);
 			}
 			if (typeof emailContent.subject !== 'string') {
-				return responseCorsStatus(400, corsHeaders);
+				return Response.json(
+					{
+						success: false,
+						reason: 'Email subject was left empty.',
+					},
+					{
+						status: 400,
+						headers: corsHeaders,
+					}
+				);
 			}
 			if (typeof emailContent.body !== 'string') {
-				return responseCorsStatus(400, corsHeaders);
+				return Response.json(
+					{
+						success: false,
+						reason: 'Email body was left empty.',
+					},
+					{
+						status: 400,
+						headers: corsHeaders,
+					}
+				);
+			}
+
+			const emailRegex =
+				/[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/g;
+			if (!emailRegex.test(emailContent.email)) {
+				return Response.json(
+					{
+						success: false,
+						reason: 'Invalid email format.',
+					},
+					{
+						status: 400,
+						headers: corsHeaders,
+					}
+				);
 			}
 
 			const msg = createMimeMessage();
 			msg.setSender({ name: emailContent.name, addr: env.SENDER_ADDRESS });
 			msg.setRecipient(env.RECIPIENT_ADDRESS);
-			msg.setSubject(emailContent.subject);
+			msg.setSubject(`${emailContent.subject} - #${nanoid()}`);
 			msg.addMessage({
 				contentType: 'text/html',
 				data: `<b>Sender's email</b>: ${emailContent.email}<br><br><b>Content</b>:<br>${emailContent.body}`,
