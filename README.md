@@ -1,2 +1,2 @@
 # Email Workers
-General purpose email sender using Cloudflare Workers
+Email sender using Cloudflare Workers for websites
