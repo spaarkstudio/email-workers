@@ -36,7 +36,7 @@ export default {
 		if (pathname === '/send' && request.method === 'POST') {
 			const emailContent = (await request.json()) as EmailContent;
 
-			if (typeof emailContent.name !== 'string') {
+			if (typeof emailContent.name !== 'string' || emailContent.name.length === 0) {
 				return Response.json(
 					{
 						success: false,
@@ -48,7 +48,7 @@ export default {
 					}
 				);
 			}
-			if (typeof emailContent.email !== 'string') {
+			if (typeof emailContent.email !== 'string' || emailContent.email.length === 0) {
 				return Response.json(
 					{
 						success: false,
@@ -60,7 +60,7 @@ export default {
 					}
 				);
 			}
-			if (typeof emailContent.subject !== 'string') {
+			if (typeof emailContent.subject !== 'string' || emailContent.subject.length === 0) {
 				return Response.json(
 					{
 						success: false,
@@ -72,7 +72,7 @@ export default {
 					}
 				);
 			}
-			if (typeof emailContent.body !== 'string') {
+			if (typeof emailContent.body !== 'string' || emailContent.body.length === 0) {
 				return Response.json(
 					{
 						success: false,
