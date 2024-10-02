@@ -87,7 +87,7 @@ export default {
 
 			const emailRegex =
 				/[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/g;
-			if (emailContent.email.length > 320 && !emailRegex.test(emailContent.email)) {
+			if (emailContent.email.length > 320 || !emailRegex.test(emailContent.email)) {
 				return Response.json(
 					{
 						success: false,
