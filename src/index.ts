@@ -87,7 +87,7 @@ export default {
 
 			const emailRegex =
 				/[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?/g;
-			if (!emailRegex.test(emailContent.email)) {
+			if (emailContent.email.length > 320 && !emailRegex.test(emailContent.email)) {
 				return Response.json(
 					{
 						success: false,
@@ -99,6 +99,8 @@ export default {
 					}
 				);
 			}
+
+			emailContent.body = emailContent.body.replace(/</g, '&lt;').replace(/>/g, '&#62;');
 
 			const msg = createMimeMessage();
 			msg.setSender({ name: emailContent.name, addr: env.SENDER_ADDRESS });
